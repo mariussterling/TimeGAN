@@ -21,8 +21,15 @@ data_loading.py
 """
 
 ## Necessary Packages
-import numpy as np
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import numpy as np
+import os
+import sys
+# sys.path.append(os.path.join(os.path.dirname(os.getcwd())))
+# from tsGAN_MJ.utils import DataManager
 
 def MinMaxScaler(data):
   """Min Max normalizer.
@@ -37,9 +44,13 @@ def MinMaxScaler(data):
   denominator = np.max(data, 0) - np.min(data, 0)
   norm_data = numerator / (denominator + 1e-7)
   return norm_data
-
-
-def sine_data_generation (no, seq_len, dim):
+# %%
+# def sine_data_MJ(no, seq_len, dim):
+#   d = DataManager()
+#   d.load('sine', n=no + seq_len)
+#   d.data.shape
+# %%
+def sine_data_generation (no, seq_len, dim, seed=42):
   """Sine data generation.
   
   Args:
@@ -49,7 +60,8 @@ def sine_data_generation (no, seq_len, dim):
     
   Returns:
     - data: generated data
-  """  
+  """
+  np.random.seed(seed)
   # Initialize the output
   data = list()
 

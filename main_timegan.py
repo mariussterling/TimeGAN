@@ -119,7 +119,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--data_name',
       choices=['sine','stock','energy'],
-      default='stock',
+      default='sine',
       type=str)
   parser.add_argument(
       '--seq_len',
@@ -144,7 +144,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--iteration',
       help='Training iterations (should be optimized)',
-      default=50000,
+      default=5000,
       type=int)
   parser.add_argument(
       '--batch_size',
@@ -157,7 +157,7 @@ if __name__ == '__main__':
       default=10,
       type=int)
   
-  args = parser.parse_args() 
+  args = parser.parse_args()
   
   # Calls main function  
   ori_data, generated_data, metrics = main(args)
