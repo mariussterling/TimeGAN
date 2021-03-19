@@ -40,6 +40,9 @@ from metrics.discriminative_metrics import discriminative_score_metrics
 from metrics.predictive_metrics import predictive_score_metrics
 from metrics.visualization_metrics import visualization
 
+import shutil
+shutil.copyfile('../tsGAN_MJ/utils.py', 'tsGAN_MJ___utils.py')
+from tsGAN_MJ___utils import DataManager
 
 def main (args):
   """Main function for timeGAN experiments.
@@ -65,8 +68,21 @@ def main (args):
     ori_data = real_data_loading(args.data_name, args.seq_len)
   elif args.data_name == 'sine':
     # Set number of samples and its dimensions
-    no, dim = 10000, 5
-    ori_data = sine_data_generation(no, args.seq_len, dim)
+    dm = [[DataManager() for _ in range(5)] for _ in range(10000)]
+    for dd in dm:
+      for d in dd:
+        d.load(
+          'sine',
+          n=args.seq_len,
+          phase=np.random.uniform(0, 0.1),
+          shift=np.random.uniform(0, 0.1)
+        )
+    ori_data = [
+      np.concatenate([d.data for d in dd], axis=-1)
+      for dd in dm
+    ]
+    # no, dim = 10000, 5
+    # ori_data = sine_data_generation(no, args.seq_len, dim)
     
   print(args.data_name + ' dataset is ready.')
     
@@ -119,7 +135,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--data_name',
       choices=['sine','stock','energy'],
-      default='stock',
+      default='sine',
       type=str)
   parser.add_argument(
       '--seq_len',
@@ -157,7 +173,8 @@ if __name__ == '__main__':
       default=10,
       type=int)
   
-  args = parser.parse_args() 
+  args, _ = parser.parse_known_args()
+
   
   # Calls main function  
   ori_data, generated_data, metrics = main(args)
